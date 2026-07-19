@@ -1,0 +1,326 @@
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #C00000;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .sidebar {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .tab-btn.active {
+      background-color: #C00000 !important;
+      color: #ffffff !important;
+      border-color: #C00000 !important;
+      box-shadow: 0 4px 12px rgba(192, 0, 0, 0.35);
+    }
+
+    .mermaid {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* DARK MODE THEME OVERRIDES */
+    body.dark-theme {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme header {
+      background-color: rgba(15, 23, 42, 0.95) !important;
+      border-bottom-color: #334155 !important;
+    }
+
+    body.dark-theme aside.sidebar {
+      background-color: #1e293b !important;
+      border-right-color: #334155 !important;
+    }
+
+    body.dark-theme aside.sidebar .nav-item {
+      color: #e2e8f0 !important;
+    }
+
+    body.dark-theme aside.sidebar .nav-item:hover {
+      background-color: #334155 !important;
+    }
+
+    /* Main cards and generic containers (using attribute selectors to catch all opacity variants like /60, /80, /90) */
+    body.dark-theme main [class*="bg-white"],
+    body.dark-theme article.lesson-panel[class*="bg-white"],
+    body.dark-theme [class*="bg-gray-50"],
+    body.dark-theme [class*="bg-slate-50"],
+    body.dark-theme .diagram-card,
+    body.dark-theme .flow-box,
+    body.dark-theme .mermaid {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-gray-100"] {
+      background-color: #334155 !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-gray-200"] {
+      background-color: #475569 !important;
+      border-color: #64748b !important;
+    }
+
+    /* Text Color Overrides for crisp dark mode contrast */
+    body.dark-theme [class*="text-gray-9"],
+    body.dark-theme [class*="text-gray-8"],
+    body.dark-theme [class*="text-gray-7"],
+    body.dark-theme [class*="text-gray-6"],
+    body.dark-theme [class*="text-gray-5"],
+    body.dark-theme .text-black,
+    body.dark-theme .sum-takeaway-text,
+    body.dark-theme .sum-pillar-text {
+      color: #f8fafc !important;
+    }
+
+    /* Brand & Accent Text Colors on Dark Backgrounds */
+    body.dark-theme [class*="text-rikkei-red"],
+    body.dark-theme [class*="text-rikkei-darkred"],
+    body.dark-theme [class*="text-red-7"],
+    body.dark-theme [class*="text-red-8"] {
+      color: #f87171 !important;
+      /* Tailwind red-400 */
+    }
+
+    body.dark-theme [class*="text-rikkei-navy"] {
+      color: #a5b4fc !important;
+      /* Tailwind indigo-300 */
+    }
+
+    body.dark-theme [class*="text-green-6"],
+    body.dark-theme [class*="text-green-7"],
+    body.dark-theme [class*="text-green-8"],
+    body.dark-theme [class*="text-emerald-6"],
+    body.dark-theme [class*="text-emerald-7"],
+    body.dark-theme [class*="text-teal-7"] {
+      color: #34d399 !important;
+      /* Tailwind emerald-400 */
+    }
+
+    body.dark-theme [class*="text-blue-6"],
+    body.dark-theme [class*="text-blue-7"],
+    body.dark-theme [class*="text-blue-8"] {
+      color: #60a5fa !important;
+      /* Tailwind blue-400 */
+    }
+
+    body.dark-theme [class*="text-purple-6"],
+    body.dark-theme [class*="text-purple-7"],
+    body.dark-theme [class*="text-purple-8"] {
+      color: #c084fc !important;
+      /* Tailwind purple-400 */
+    }
+
+    body.dark-theme [class*="text-amber-6"],
+    body.dark-theme [class*="text-amber-7"],
+    body.dark-theme [class*="text-amber-8"],
+    body.dark-theme [class*="text-yellow-7"] {
+      color: #fbbf24 !important;
+      /* Tailwind amber-400 */
+    }
+
+    /* Borders */
+    body.dark-theme [class*="border-gray-2"],
+    body.dark-theme [class*="border-gray-3"],
+    body.dark-theme [class*="border-gray-1"] {
+      border-color: #334155 !important;
+    }
+
+    body.dark-theme [class*="border-green-2"],
+    body.dark-theme [class*="border-green-4"] {
+      border-color: #065f46 !important;
+    }
+
+    body.dark-theme [class*="border-blue-2"],
+    body.dark-theme [class*="border-blue-4"] {
+      border-color: #1e40af !important;
+    }
+
+    body.dark-theme [class*="border-amber-2"],
+    body.dark-theme [class*="border-amber-4"] {
+      border-color: #92400e !important;
+    }
+
+    body.dark-theme [class*="border-purple-2"],
+    body.dark-theme [class*="border-purple-4"] {
+      border-color: #6b21a8 !important;
+    }
+
+    body.dark-theme [class*="border-red-2"],
+    body.dark-theme [class*="border-red-4"] {
+      border-color: #991b1b !important;
+    }
+
+    /* Override ALL Background Gradients & Special Panels (TRỰC QUAN HÓA SƠ ĐỒ & DIỄN BIẾN CỐT TRUYỆN & ỨNG DỤNG THỰC TẾ) */
+    body.dark-theme [class*="from-slate-"],
+    body.dark-theme [class*="from-white"],
+    body.dark-theme [class*="from-gray-"] {
+      background-image: linear-gradient(to bottom right, #1e293b, #0f172a) !important;
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    body.dark-theme [class*="from-red-"] {
+      background-image: linear-gradient(to right, #1e293b, #1a1528) !important;
+      background-color: #1e293b !important;
+      border-color: #991b1b !important;
+    }
+
+    body.dark-theme [class*="from-green-"],
+    body.dark-theme [class*="from-emerald-"] {
+      background-image: linear-gradient(to right, #1e293b, #13232c) !important;
+      background-color: #1e293b !important;
+      border-color: #065f46 !important;
+    }
+
+    body.dark-theme [class*="from-blue-"] {
+      background-image: linear-gradient(to right, #1e293b, #14213d) !important;
+      background-color: #1e293b !important;
+      border-color: #1e40af !important;
+    }
+
+    body.dark-theme [class*="from-amber-"],
+    body.dark-theme [class*="from-orange-"] {
+      background-image: linear-gradient(to right, #1e293b, #251d20) !important;
+      background-color: #1e293b !important;
+      border-color: #92400e !important;
+    }
+
+    /* Deep Dark Backgrounds for Case Studies & Flowchart Boxes (Catching all opacity variations like /60, /80) */
+    body.dark-theme [class*="bg-green-50"],
+    body.dark-theme [class*="bg-emerald-50"],
+    body.dark-theme [class*="bg-teal-50"] {
+      background-color: #13232c !important;
+      border-color: #065f46 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-blue-50"] {
+      background-color: #14213d !important;
+      border-color: #1e40af !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-amber-50"],
+    body.dark-theme [class*="bg-yellow-50"],
+    body.dark-theme [class*="bg-orange-50"] {
+      background-color: #231c24 !important;
+      border-color: #92400e !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-red-50"] {
+      background-color: #221520 !important;
+      border-color: #991b1b !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-purple-50"] {
+      background-color: #1e1b30 !important;
+      border-color: #6b21a8 !important;
+      color: #f8fafc !important;
+    }
+
+    /* Pill Badges in Dark Mode (-100 backgrounds) */
+    body.dark-theme [class*="bg-red-100"],
+    body.dark-theme [class*="bg-red-200"] {
+      background-color: rgba(185, 28, 28, 0.35) !important;
+      color: #fca5a5 !important;
+      border: 1px solid rgba(248, 113, 113, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-blue-100"] {
+      background-color: rgba(30, 58, 138, 0.35) !important;
+      color: #93c5fd !important;
+      border: 1px solid rgba(96, 165, 250, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-green-100"],
+    body.dark-theme [class*="bg-green-200"] {
+      background-color: rgba(6, 78, 59, 0.35) !important;
+      color: #86efac !important;
+      border: 1px solid rgba(74, 222, 128, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-amber-100"] {
+      background-color: rgba(120, 53, 15, 0.35) !important;
+      color: #fde047 !important;
+      border: 1px solid rgba(250, 204, 21, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-purple-100"] {
+      background-color: rgba(88, 28, 135, 0.35) !important;
+      color: #d8b4fe !important;
+      border: 1px solid rgba(192, 132, 252, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-rikkei-lightnavy"] {
+      background-color: rgba(42, 32, 76, 0.7) !important;
+      color: #c4b5fd !important;
+      border-color: rgba(165, 180, 252, 0.3) !important;
+    }
+
+    body.dark-theme .diagram-canvas>div,
+    body.dark-theme .flow-box,
+    body.dark-theme .diagram-card {
+      color: #f8fafc !important;
+    }
+
+    body:not(.dark-theme) .sum-takeaway-text,
+    body:not(.dark-theme) .sum-pillar-text {
+      color: #000000 !important;
+      font-weight: 600 !important;
+    }
+  </style>
