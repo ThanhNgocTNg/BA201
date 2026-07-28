@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 
 <head>
@@ -14,8 +14,358 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="assets/js/tailwind.config.js"></script>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rikkei: {
+              red: '#C00000',
+              darkred: '#900000',
+              light: '#fff5f5',
+              border: '#ffd6d9',
+              navy: '#3C2F6A',
+              darknavy: '#2A204C',
+              lightnavy: '#f3f2f8',
+              gold: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #C00000;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .sidebar {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .tab-btn.active {
+      background-color: #C00000 !important;
+      color: #ffffff !important;
+      border-color: #C00000 !important;
+      box-shadow: 0 4px 12px rgba(192, 0, 0, 0.35);
+    }
+
+    .mermaid {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* DARK MODE THEME OVERRIDES */
+    body.dark-theme {
+      background-color: #0f172a !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme header {
+      background-color: rgba(15, 23, 42, 0.95) !important;
+      border-bottom-color: #334155 !important;
+    }
+
+    body.dark-theme aside.sidebar {
+      background-color: #1e293b !important;
+      border-right-color: #334155 !important;
+    }
+
+    body.dark-theme aside.sidebar .nav-item {
+      color: #e2e8f0 !important;
+    }
+
+    body.dark-theme aside.sidebar .nav-item:hover {
+      background-color: #334155 !important;
+    }
+
+    /* Main cards and generic containers (using attribute selectors to catch all opacity variants like /60, /80, /90) */
+    body.dark-theme main [class*="bg-white"],
+    body.dark-theme article.lesson-panel[class*="bg-white"],
+    body.dark-theme [class*="bg-gray-50"],
+    body.dark-theme [class*="bg-slate-50"],
+    body.dark-theme .diagram-card,
+    body.dark-theme .flow-box,
+    body.dark-theme .mermaid {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-gray-100"] {
+      background-color: #334155 !important;
+      border-color: #475569 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-gray-200"] {
+      background-color: #475569 !important;
+      border-color: #64748b !important;
+    }
+
+    /* Text Color Overrides for crisp dark mode contrast */
+    body.dark-theme [class*="text-gray-9"],
+    body.dark-theme [class*="text-gray-8"],
+    body.dark-theme [class*="text-gray-7"],
+    body.dark-theme [class*="text-gray-6"],
+    body.dark-theme [class*="text-gray-5"],
+    body.dark-theme .text-black,
+    body.dark-theme .sum-takeaway-text,
+    body.dark-theme .sum-pillar-text {
+      color: #f8fafc !important;
+    }
+
+    /* Brand & Accent Text Colors on Dark Backgrounds */
+    body.dark-theme [class*="text-rikkei-red"],
+    body.dark-theme [class*="text-rikkei-darkred"],
+    body.dark-theme [class*="text-red-7"],
+    body.dark-theme [class*="text-red-8"] {
+      color: #f87171 !important;
+      /* Tailwind red-400 */
+    }
+
+    body.dark-theme [class*="text-rikkei-navy"] {
+      color: #a5b4fc !important;
+      /* Tailwind indigo-300 */
+    }
+
+    body.dark-theme [class*="text-green-6"],
+    body.dark-theme [class*="text-green-7"],
+    body.dark-theme [class*="text-green-8"],
+    body.dark-theme [class*="text-emerald-6"],
+    body.dark-theme [class*="text-emerald-7"],
+    body.dark-theme [class*="text-teal-7"] {
+      color: #34d399 !important;
+      /* Tailwind emerald-400 */
+    }
+
+    body.dark-theme [class*="text-blue-6"],
+    body.dark-theme [class*="text-blue-7"],
+    body.dark-theme [class*="text-blue-8"] {
+      color: #60a5fa !important;
+      /* Tailwind blue-400 */
+    }
+
+    body.dark-theme [class*="text-purple-6"],
+    body.dark-theme [class*="text-purple-7"],
+    body.dark-theme [class*="text-purple-8"] {
+      color: #c084fc !important;
+      /* Tailwind purple-400 */
+    }
+
+    body.dark-theme [class*="text-amber-6"],
+    body.dark-theme [class*="text-amber-7"],
+    body.dark-theme [class*="text-amber-8"],
+    body.dark-theme [class*="text-yellow-7"] {
+      color: #fbbf24 !important;
+      /* Tailwind amber-400 */
+    }
+
+    /* Borders */
+    body.dark-theme [class*="border-gray-2"],
+    body.dark-theme [class*="border-gray-3"],
+    body.dark-theme [class*="border-gray-1"] {
+      border-color: #334155 !important;
+    }
+
+    body.dark-theme [class*="border-green-2"],
+    body.dark-theme [class*="border-green-4"] {
+      border-color: #065f46 !important;
+    }
+
+    body.dark-theme [class*="border-blue-2"],
+    body.dark-theme [class*="border-blue-4"] {
+      border-color: #1e40af !important;
+    }
+
+    body.dark-theme [class*="border-amber-2"],
+    body.dark-theme [class*="border-amber-4"] {
+      border-color: #92400e !important;
+    }
+
+    body.dark-theme [class*="border-purple-2"],
+    body.dark-theme [class*="border-purple-4"] {
+      border-color: #6b21a8 !important;
+    }
+
+    body.dark-theme [class*="border-red-2"],
+    body.dark-theme [class*="border-red-4"] {
+      border-color: #991b1b !important;
+    }
+
+    /* Override ALL Background Gradients & Special Panels (TRỰC QUAN HÓA SƠ ĐỒ & DIỄN BIẾN CỐT TRUYỆN & ỨNG DỤNG THỰC TẾ) */
+    body.dark-theme [class*="from-slate-"],
+    body.dark-theme [class*="from-white"],
+    body.dark-theme [class*="from-gray-"] {
+      background-image: linear-gradient(to bottom right, #1e293b, #0f172a) !important;
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    body.dark-theme [class*="from-red-"] {
+      background-image: linear-gradient(to right, #1e293b, #1a1528) !important;
+      background-color: #1e293b !important;
+      border-color: #991b1b !important;
+    }
+
+    body.dark-theme [class*="from-green-"],
+    body.dark-theme [class*="from-emerald-"] {
+      background-image: linear-gradient(to right, #1e293b, #13232c) !important;
+      background-color: #1e293b !important;
+      border-color: #065f46 !important;
+    }
+
+    body.dark-theme [class*="from-blue-"] {
+      background-image: linear-gradient(to right, #1e293b, #14213d) !important;
+      background-color: #1e293b !important;
+      border-color: #1e40af !important;
+    }
+
+    body.dark-theme [class*="from-amber-"],
+    body.dark-theme [class*="from-orange-"] {
+      background-image: linear-gradient(to right, #1e293b, #251d20) !important;
+      background-color: #1e293b !important;
+      border-color: #92400e !important;
+    }
+
+    /* Deep Dark Backgrounds for Case Studies & Flowchart Boxes (Catching all opacity variations like /60, /80) */
+    body.dark-theme [class*="bg-green-50"],
+    body.dark-theme [class*="bg-emerald-50"],
+    body.dark-theme [class*="bg-teal-50"] {
+      background-color: #13232c !important;
+      border-color: #065f46 !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-blue-50"] {
+      background-color: #14213d !important;
+      border-color: #1e40af !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-amber-50"],
+    body.dark-theme [class*="bg-yellow-50"],
+    body.dark-theme [class*="bg-orange-50"] {
+      background-color: #231c24 !important;
+      border-color: #92400e !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-red-50"] {
+      background-color: #221520 !important;
+      border-color: #991b1b !important;
+      color: #f8fafc !important;
+    }
+
+    body.dark-theme [class*="bg-purple-50"] {
+      background-color: #1e1b30 !important;
+      border-color: #6b21a8 !important;
+      color: #f8fafc !important;
+    }
+
+    /* Pill Badges in Dark Mode (-100 backgrounds) */
+    body.dark-theme [class*="bg-red-100"],
+    body.dark-theme [class*="bg-red-200"] {
+      background-color: rgba(185, 28, 28, 0.35) !important;
+      color: #fca5a5 !important;
+      border: 1px solid rgba(248, 113, 113, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-blue-100"] {
+      background-color: rgba(30, 58, 138, 0.35) !important;
+      color: #93c5fd !important;
+      border: 1px solid rgba(96, 165, 250, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-green-100"],
+    body.dark-theme [class*="bg-green-200"] {
+      background-color: rgba(6, 78, 59, 0.35) !important;
+      color: #86efac !important;
+      border: 1px solid rgba(74, 222, 128, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-amber-100"] {
+      background-color: rgba(120, 53, 15, 0.35) !important;
+      color: #fde047 !important;
+      border: 1px solid rgba(250, 204, 21, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-purple-100"] {
+      background-color: rgba(88, 28, 135, 0.35) !important;
+      color: #d8b4fe !important;
+      border: 1px solid rgba(192, 132, 252, 0.4) !important;
+    }
+
+    body.dark-theme [class*="bg-rikkei-lightnavy"] {
+      background-color: rgba(42, 32, 76, 0.7) !important;
+      color: #c4b5fd !important;
+      border-color: rgba(165, 180, 252, 0.3) !important;
+    }
+
+    body.dark-theme .diagram-canvas>div,
+    body.dark-theme .flow-box,
+    body.dark-theme .diagram-card {
+      color: #f8fafc !important;
+    }
+
+    body:not(.dark-theme) .sum-takeaway-text,
+    body:not(.dark-theme) .sum-pillar-text {
+      color: #000000 !important;
+      font-weight: 600 !important;
+    }
+  </style>
+</head>
 
 <body class="min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
 
@@ -51,6 +401,12 @@
         class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-900 text-yellow-300 hover:bg-gray-800 transition shadow-sm border border-gray-700 shrink-0">
         <i id="themeToggleIcon" class="ph-fill ph-moon-stars text-lg"></i>
         <span id="themeToggleText" class="hidden">Chế độ Tối</span>
+      </button>
+
+      <!-- Pet Toggle Button (Bật/Tắt con lợn) -->
+      <button id="petToggleBtn" onclick="togglePetVisibility()" title="Bật / Tắt Heo con (Web Pet)"
+        class="w-10 h-10 rounded-full flex items-center justify-center bg-pink-100 hover:bg-pink-200 text-pink-600 dark:bg-pink-950/60 dark:hover:bg-pink-900/80 dark:text-pink-300 transition shadow-sm border border-pink-300 dark:border-pink-700 shrink-0 cursor-pointer">
+        <span class="text-lg leading-none select-none" id="petToggleIcon">🐽</span>
       </button>
 
       <!-- Overview Button -->
@@ -473,8 +829,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 01</span>
-                <span
-                  <span class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý thuyết</span>
+                <span <span
+                  class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý
+                  thuyết</span>
 
               </div>
               <h4
@@ -497,8 +854,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 02</span>
-                <span
-                  <span class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý thuyết</span>
+                <span <span
+                  class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý
+                  thuyết</span>
 
               </div>
               <h4
@@ -521,8 +879,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 03</span>
-                <span
-                  <span class="bg-amber-100 text-amber-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-amber-200 uppercase">Thực hành</span>
+                <span <span
+                  class="bg-amber-100 text-amber-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-amber-200 uppercase">Thực
+                  hành</span>
 
               </div>
               <h4
@@ -545,8 +904,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 04</span>
-                <span
-                  <span class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý thuyết</span>
+                <span <span
+                  class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý
+                  thuyết</span>
 
               </div>
               <h4
@@ -569,8 +929,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 05</span>
-                <span
-                  <span class="bg-amber-100 text-amber-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-amber-200 uppercase">Thực hành</span>
+                <span <span
+                  class="bg-amber-100 text-amber-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-amber-200 uppercase">Thực
+                  hành</span>
 
               </div>
               <h4
@@ -593,8 +954,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 07</span>
-                <span
-                  <span class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý thuyết</span>
+                <span <span
+                  class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý
+                  thuyết</span>
 
               </div>
               <h4
@@ -617,8 +979,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 08</span>
-                <span
-                  <span class="bg-amber-100 text-amber-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-amber-200 uppercase">Thực hành</span>
+                <span <span
+                  class="bg-amber-100 text-amber-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-amber-200 uppercase">Thực
+                  hành</span>
 
               </div>
               <h4
@@ -641,8 +1004,9 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="bg-rikkei-red/10 text-rikkei-red font-black text-sm px-3 py-1 rounded-xl">SESSION 09</span>
-                <span
-                  <span class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý thuyết</span>
+                <span <span
+                  class="bg-blue-100 text-blue-800 font-bold text-[10px] md:text-xs px-2.5 py-0.5 rounded-full border border-blue-200 uppercase">Lý
+                  thuyết</span>
 
               </div>
               <h4
@@ -2163,8 +2527,7 @@
               Thực chiến Nghiệp vụ tại FPT Retail: Xác Lập &amp; Phân Định Vai Trò Business Analyst (BA vs PO vs PM)
             </h3>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-              Áp dụng chuẩn mực tri thức IIBA BABOK® Guide v3 để tháo gỡ sự xung đột vai trò trong bối cảnh nâng cấp hệ
-              thống bán lẻ dược phẩm Long Châu, khẳng định vị thế và giá trị thực tiễn của BA chuyên nghiệp.
+              Dựa trên các kiến thức tổng quan về ranh giới, định nghĩa và vai trò của Business Analyst đã học trong Session 1, hãy tháo gỡ sự xung đột vai trò trong bối cảnh nâng cấp hệ thống bán lẻ dược phẩm Long Châu, khẳng định vị thế và giá trị thực tiễn của BA chuyên nghiệp.
             </p>
           </div>
 
@@ -2291,9 +2654,7 @@
                   <i class="ph-bold ph-list-checks text-blue-600 dark:text-blue-400 text-lg"></i> YÊU CẦU THỰC HIỆN:
                 </div>
                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Dựa vào chương 9 (Underlying Competencies) của BABOK® Guide v3 đã học, hãy lập Bản đánh giá &amp; Kế
-                  hoạch ứng dụng 4 nhóm năng lực cốt lõi của bạn để giải quyết triệt để 3 vấn đề tồn đọng của hệ thống
-                  POS Long Châu hiện tại:
+                  Dựa vào 4 nhóm năng lực cốt lõi của Business Analyst đã được học trong Session 1 (Tư duy giải quyết vấn đề, Giao tiếp, Kỹ năng công nghệ &amp; Kiến thức nghiệp vụ), hãy lập Bản đánh giá &amp; Kế hoạch ứng dụng năng lực cá nhân để giải quyết triệt để 3 vấn đề tồn đọng của hệ thống POS Long Châu hiện tại:
                 </p>
                 <ul class="space-y-3 text-sm md:text-base text-gray-700 dark:text-gray-300 pl-1">
                   <li class="flex items-start gap-3">
@@ -5777,7 +6138,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -6171,7 +6532,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -8826,9 +9187,7 @@
               Thực chiến Nghiệp vụ tại FPT Retail: Bản Đồ Stakeholder, RACI &amp; Kỹ Thuật Khai Thác Yêu Cầu
             </h3>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-              Áp dụng các kỹ thuật Elicitation &amp; Collaboration theo BABOK® Guide v3 để nhận diện toàn bộ các bên
-              liên quan ẩn/hiện, phân tán quyền lực bằng ma trận RACI và thiết kế kịch bản phỏng vấn khai thác thông tin
-              sâu sắc.
+              Dựa trên các kỹ thuật Elicitation &amp; Collaboration (Khai thác và Cộng tác yêu cầu) đã học trong Session 4 cùng các kiến thức phân tích vấn đề của Session trước, hãy nhận diện toàn bộ các bên liên quan ẩn/hiện, phân lập quyền lực bằng ma trận RACI và thiết kế kịch bản phỏng vấn khai thác thông tin sâu sắc.
             </p>
           </div>
 
@@ -9801,7 +10160,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -11152,7 +11511,8 @@
                           hay không kê đơn?]</span> &rarr; (Nếu kê đơn) Kiểm tra chữ ký bác sĩ &amp; hạn đơn &rarr;
                         <span class="bg-emerald-100 text-emerald-900 font-bold px-1.5 py-0.5 rounded">[Gateway: Đơn hợp
                           lệ không?]</span> &rarr; (Hợp lệ) Quét mã vào POS | (Không hợp lệ) Từ chối &amp; tư vấn khám
-                        lại.</p>
+                        lại.
+                      </p>
                     </div>
 
                     <!-- Level 3 -->
@@ -13567,7 +13927,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -13965,7 +14325,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -14280,7 +14640,8 @@
                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed pl-6">Trong cú pháp
                   Gherkin, <code>Given</code> chỉ dùng cho bối cảnh tiền điều kiện (chưa có hành động mới nào diễn ra),
                   <code>When</code> là hành động kích hoạt duy nhất của người dùng (nhấn nút/nhập liệu), và
-                  <code>Then</code> là kết quả hệ thống phản hồi hiển thị ra màn hình hoặc ghi vào DB.</p>
+                  <code>Then</code> là kết quả hệ thống phản hồi hiển thị ra màn hình hoặc ghi vào DB.
+                </p>
               </div>
               <div
                 class="p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/80 space-y-2.5 shadow-2xs">
@@ -16548,9 +16909,7 @@
               Thực chiến Nghiệp vụ tại FPT Retail: Đánh Giá Giải Pháp, MoSCoW &amp; Đóng Gói MVP v1.0
             </h3>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
-              Áp dụng tư duy chiến lược Solution Assessment theo BABOK® Guide v3 để đánh giá các phương án giải quyết
-              bài toán POS Long Châu, dùng ma trận MoSCoW chốt phạm vi MVP khả thi tối thiểu và tính toán chỉ số hoàn
-              vốn đầu tư ROI thuyết phục Ban Giám đốc.
+              Dựa trên các kỹ thuật Đánh giá giải pháp (Solution Assessment), ma trận phân loại ưu tiên MoSCoW và đóng gói MVP đã được học trong Session 9 cùng các Session trước, hãy đánh giá các phương án giải quyết bài toán POS Long Châu, chốt phạm vi MVP khả thi tối thiểu và tính toán chỉ số hoàn vốn đầu tư ROI thuyết phục Ban Giám đốc.
             </p>
           </div>
 
@@ -17618,7 +17977,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -17657,7 +18016,9 @@
                     <li class="flex items-start gap-3">
                       <span
                         class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-emerald-300 dark:border-emerald-800">1</span>
-                      <span class="leading-relaxed"><b>Xác định Định hướng Chiến lược & Mục tiêu Dự án (Project Vision):</b> Viết mô tả định hướng giải pháp, làm rõ giá trị cốt lõi và bức tranh toàn cảnh kỳ vọng sau khi nâng cấp cho
+                      <span class="leading-relaxed"><b>Xác định Định hướng Chiến lược & Mục tiêu Dự án (Project
+                          Vision):</b> Viết mô tả định hướng giải pháp, làm rõ giá trị cốt lõi và bức tranh toàn cảnh kỳ
+                        vọng sau khi nâng cấp cho
                         Dự án chuyển đổi số nâng cấp toàn diện hệ sinh thái quản trị chuỗi cung ứng và quầy bán lẻ
                         FreshMart / Long Châu.</span>
                     </li>
@@ -17863,7 +18224,8 @@
                     <li class="flex items-start gap-3">
                       <span
                         class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-emerald-300 dark:border-emerald-800">3</span>
-                      <span class="leading-relaxed"><b>Tóm tắt tổng quan Dự án bằng Infographic (Executive Summary):</b> Thiết kế
+                      <span class="leading-relaxed"><b>Tóm tắt tổng quan Dự án bằng Infographic (Executive Summary):</b>
+                        Thiết kế
                         trang tổng hợp một trang (One-pager Executive Summary) cô đọng toàn bộ giá trị Đề án để trình
                         C-Level duyệt nhanh trong 5 phút.</span>
                     </li>
@@ -18368,7 +18730,7 @@
               </h4>
               <span
                 class="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-sm md:text-base font-bold text-blue-700 dark:text-blue-300 self-start sm:self-center shrink-0">
-                <i class="ph-bold ph-list-checks mr-1"></i> Chuẩn năng lực IIBA BABOK®
+                <i class="ph-bold ph-list-checks mr-1"></i> Áp dụng kiến thức Session hiện tại &amp; các Session trước
               </span>
             </div>
             <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 font-medium pl-1">
@@ -18472,7 +18834,8 @@
                     <li class="flex items-start gap-3">
                       <span
                         class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-emerald-300 dark:border-emerald-800">1</span>
-                      <span class="leading-relaxed"><b>Lập Ma trận truy vết yêu cầu hai chiều (RTM - Bi-directional Traceability):</b>
+                      <span class="leading-relaxed"><b>Lập Ma trận truy vết yêu cầu hai chiều (RTM - Bi-directional
+                          Traceability):</b>
                         Thiết lập bảng Excel/Jira liên kết chặt chẽ từng Yêu cầu Kinh doanh (`BRD_ID`) -> Yêu cầu Chức
                         năng (`SRS_ID`) -> User Story ID (`US_ID`) -> Sơ đồ BPMN Task (`BPMN_Task_ID`) -> Kịch bản Kiểm
                         thử (`TC_Gherkin_ID`).</span>
@@ -18480,7 +18843,8 @@
                     <li class="flex items-start gap-3">
                       <span
                         class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-emerald-300 dark:border-emerald-800">2</span>
-                      <span class="leading-relaxed"><b>Kiểm tra Lỗ hổng & Yêu cầu thừa thãi (Orphan & Gold-plating Check):</b> Phát
+                      <span class="leading-relaxed"><b>Kiểm tra Lỗ hổng & Yêu cầu thừa thãi (Orphan & Gold-plating
+                          Check):</b> Phát
                         hiện và loại bỏ các 'Yêu cầu mồ côi' (có code nhưng không xuất phát từ nhu cầu kinh doanh nào -
                         Gold-plating) và các 'Mục tiêu bị bỏ rơi' (có trong BRD nhưng chưa có User Story nào thực
                         hiện).</span>
@@ -18604,7 +18968,8 @@
                     <li class="flex items-start gap-3">
                       <span
                         class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-emerald-300 dark:border-emerald-800">1</span>
-                      <span class="leading-relaxed"><b>Kế hoạch Chuyển đổi & Vận hành chính thức (Cut-over & Go-Live Plan):</b> Lập
+                      <span class="leading-relaxed"><b>Kế hoạch Chuyển đổi & Vận hành chính thức (Cut-over & Go-Live
+                          Plan):</b> Lập
                         lịch trình chi tiết từng giờ cho đêm chuyển đổi hệ thống từ POS cũ sang POS mới (Ví dụ: Từ 22h00
                         tối Thứ Bảy đến 05h00 sáng Chủ Nhật) kèm Kế hoạch phục hồi khẩn cấp (Rollback Plan nếu xảy ra sự
                         cố).</span>
@@ -20410,9 +20775,66 @@
       </div>
 
       <!-- JS Controller for Glossary -->
+      <script>
+        let currentLetterFilter = 'ALL';
+
+        function setAlphabetFilter(letter) {
+          currentLetterFilter = letter;
+          document.querySelectorAll('#alphabet-filters .alpha-btn').forEach(btn => {
+            if (btn.getAttribute('data-letter') === letter) {
+              btn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm', 'active');
+              btn.classList.remove('bg-gray-100', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-gray-300');
+            } else {
+              btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm', 'active');
+              btn.classList.add('bg-gray-100', 'dark:bg-slate-700', 'text-gray-700', 'dark:text-gray-300');
+            }
+          });
+          filterGlossary();
+        }
+
+        function filterGlossary() {
+          const query = (document.getElementById('glossary-search').value || '').toLowerCase().trim();
+          const items = document.querySelectorAll('.glossary-item');
+          let visibleCount = 0;
+
+          items.forEach(item => {
+            const itemLetter = item.getAttribute('data-letter') || '';
+            const itemText = item.textContent.toLowerCase();
+
+            const matchesLetter = (currentLetterFilter === 'ALL' || itemLetter === currentLetterFilter);
+            const matchesQuery = (query === '' || itemText.includes(query));
+
+            if (matchesLetter && matchesQuery) {
+              item.classList.remove('hidden');
+              visibleCount++;
+            } else {
+              item.classList.add('hidden');
+            }
+          });
+
+          const emptyState = document.getElementById('glossary-empty');
+          const gridEl = document.getElementById('glossary-grid');
+          if (emptyState && gridEl) {
+            if (visibleCount === 0) {
+              emptyState.classList.remove('hidden');
+              gridEl.classList.add('hidden');
+            } else {
+              emptyState.classList.add('hidden');
+              gridEl.classList.remove('hidden');
+            }
+          }
+        }
+      </script>
     </div>
 
   </main>
+
+  <!-- PET TOGGLE FLOATING BUTTON -->
+  <button id="floatingPetToggleBtn" onclick="togglePetVisibility()"
+    class="fixed bottom-6 left-6 md:bottom-8 md:left-8 z-50 p-3.5 md:p-4 rounded-2xl bg-pink-500/90 hover:bg-pink-600 text-white shadow-xl hover:shadow-2xl backdrop-blur-md transition-all duration-300 flex items-center justify-center group border border-white/20 cursor-pointer hover:scale-105"
+    title="Bật / Tắt Heo con (Web Pet)">
+    <span class="text-xl md:text-2xl leading-none select-none">🐽</span>
+  </button>
 
   <!-- BACK TO TOP FLOATING BUTTON -->
   <button id="backToTopBtn" onclick="scrollToTop()"
@@ -20427,6 +20849,273 @@
     <p>Giáo trình Điện tử Interactive All-in-One được xây dựng theo chuẩn kiến thức IIBA BABOK&reg; Guide.</p>
   </footer>
 
+  <script>
+    // JS CONTROLLER FOR VIEWS, TABS, ROADMAP, AND GSAP ANIMATIONS
+    function showView(viewId) {
+      document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
+      const targetEl = document.getElementById('view-' + viewId);
+      if (targetEl) {
+        targetEl.classList.remove('hidden');
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(targetEl, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' });
+          if (viewId === 'overview') {
+            const cards = targetEl.querySelectorAll('.grid > div');
+            if (cards.length > 0) {
+              gsap.fromTo(cards, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out', clearProps: 'opacity,transform' });
+            }
+          }
+        }
+      }
+      document.querySelectorAll('header button').forEach(btn => btn.classList.remove('bg-rikkei-red', 'bg-rikkei-navy', 'bg-amber-500', 'text-white', 'font-bold'));
+      const btnOverview = document.getElementById('btn-overview');
+      const btnRoadmap = document.getElementById('btn-roadmap');
+      const btnGlossary = document.getElementById('btn-glossary');
+      if (viewId === 'overview' && btnOverview) {
+        btnOverview.classList.add('bg-gray-200', 'font-bold');
+      } else if (viewId === 'roadmap' && btnRoadmap) {
+        btnRoadmap.classList.add('bg-amber-500', 'text-white', 'font-bold');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+
+    function showSession(sNum) {
+      showView('session-' + sNum);
+      showLessonTab(sNum, 1);
+    }
+
+    // LESSON TABS CONTROLLER
+    function showLessonTab(sNum, lId) {
+      const sessionView = document.getElementById('view-session-' + sNum);
+      if (!sessionView) return;
+
+      sessionView.querySelectorAll('.lesson-panel').forEach(panel => panel.classList.add('hidden'));
+      sessionView.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      const targetPanel = sessionView.querySelector('#panel-s' + sNum + '-l' + lId);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(targetPanel, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' });
+        }
+      }
+
+      const activeBtn = sessionView.querySelector('#btn-s' + sNum + '-l' + lId);
+      if (activeBtn) activeBtn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextLessonInSession(sNum, currentLId) {
+      const sessionView = document.getElementById('view-session-' + sNum);
+      if (!sessionView) return;
+      const tabBtns = Array.from(sessionView.querySelectorAll('.tab-btn'));
+      const currentBtnId = 'btn-s' + sNum + '-l' + currentLId;
+      const currentIndex = tabBtns.findIndex(btn => btn.id === currentBtnId);
+      if (currentIndex !== -1 && currentIndex < tabBtns.length - 1) {
+        tabBtns[currentIndex + 1].click();
+      } else if (currentIndex === tabBtns.length - 1) {
+        if (sNum < 10) {
+          showSession(sNum + 1);
+        } else {
+          showView('view-roadmap');
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function prevLessonInSession(sNum, currentLId) {
+      const sessionView = document.getElementById('view-session-' + sNum);
+      if (!sessionView) return;
+      const tabBtns = Array.from(sessionView.querySelectorAll('.tab-btn'));
+      const currentBtnId = 'btn-s' + sNum + '-l' + currentLId;
+      const currentIndex = tabBtns.findIndex(btn => btn.id === currentBtnId);
+      if (currentIndex > 0) {
+        tabBtns[currentIndex - 1].click();
+      } else if (currentIndex === 0 && sNum > 1) {
+        showSession(sNum - 1);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTopBtn');
+      if (!btn) return;
+      if (window.scrollY > 300) {
+        btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        btn.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      } else {
+        btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        btn.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      }
+    });
+
+    // ROADMAP DETAIL CONTROLLER (10-STEP BUSINESS ANALYSIS WORKFLOW)
+    const roadmapData = {
+      1: {
+        sNum: 1,
+        badge: "BƯỚC 1 • SESSION 1: TỔNG QUAN VỀ BA & VAI TRÒ",
+        pain: "Hiểu rõ định nghĩa BA theo chuẩn IIBA BABOK Guide, phân định ranh giới trách nhiệm giữa BA vs DA vs PO vs PM, và xác định tư duy phân tích nghiệp vụ (BA Mindset).",
+        skill: "• Khung tư duy giải quyết vấn đề (Problem Solving Framework).<br>• Phân tích chuỗi giá trị (Value Proposition Design).<br>• Ma trận phân định trách nhiệm RACI Matrix.",
+        solution: "Bảng phân định ranh giới công việc BA trong dự án CNTT & Kế hoạch phát triển năng lực cá nhân theo chuẩn 6 vùng kiến thức BABOK V3."
+      },
+      2: {
+        sNum: 2,
+        badge: "BƯỚC 2 • SESSION 2: KHẢO SÁT HIỆN TRẠNG (AS-IS)",
+        pain: "Nhận diện nỗi đau nghiệp vụ tại doanh nghiệp (FPT Retail / Long Châu), thu thập triệu chứng lỗi và bóc tách bối cảnh hiện trạng vận hành AS-IS.",
+        skill: "• Kỹ thuật phỏng vấn sơ bộ & quan sát (Shadowing).<br>• Mô hình định nghĩa vấn đề SMART Problem Statement.<br>• Biểu đồ luồng thông tin nghiệp vụ hiện trạng (AS-IS Context).",
+        solution: "Tuyên bố vấn đề kinh doanh (SMART Problem Statement) & Báo cáo đánh giá sơ bộ điểm nghẽn vận hành tại quầy POS."
+      },
+      3: {
+        sNum: 3,
+        badge: "BƯỚC 3 • SESSION 3: PHÂN TÍCH NGUYÊN NHÂN (RCA)",
+        pain: "Đi sâu phân tích nguyên nhân gốc rễ gây ra ùn ứ và lỗi thao tác tại quầy thu ngân, phân vùng lỗi do Quy trình - Con người hay Hệ thống, chốt phạm vi dự án.",
+        skill: "• Kỹ thuật 5 Whys (Truy vấn nguyên nhân gốc).<br>• Biểu đồ xương cá Ishikawa (6Ms Analysis).<br>• Phân định giới hạn phạm vi In-Scope vs Out-of-Scope.",
+        solution: "Sơ đồ chẩn đoán nguyên nhân gốc rễ (RCA Map) & Tài liệu xác lập phạm vi dự án (Project Scope Statement)."
+      },
+      4: {
+        sNum: 4,
+        badge: "BƯỚC 4 • SESSION 4: STAKEHOLDER ANALYSIS",
+        pain: "Nhận diện diện rộng 360° tất cả các bên liên quan (Dược sĩ, Khách hàng, IT, Kế toán, Ban Giám đốc), đánh giá quyền lực và mức độ ảnh hưởng của từng nhóm.",
+        skill: "• Sơ đồ nhận diện Stakeholders 360°.<br>• Ma trận Quyền lực vs Mức độ quan tâm (Power/Interest Grid).<br>• Chiến lược quản trị kỳ vọng & Giao tiếp (Communication Plan).",
+        solution: "Hồ sơ phân tích Stakeholder Matrix & Kế hoạch truyền thông, quản trị rủi ro xung đột lợi ích dự án."
+      },
+      5: {
+        sNum: 5,
+        badge: "BƯỚC 5 • SESSION 5: KHAI THÁC YÊU CẦU (ELICITATION)",
+        pain: "Trực tiếp điều phối và áp dụng các kỹ thuật khai thác yêu cầu chuyên sâu để lấy được nhu cầu thực tế từ người dùng cuối thay vì ý muốn chủ quan.",
+        skill: "• Kỹ thuật Phỏng vấn 1-1 chuyên sâu (Semi-structured Interview).<br>• Tổ chức hội thảo đồng sáng tạo JAD Workshop.<br>• Kỹ thuật tạo Prototype nhanh & Khảo sát thực địa.",
+        solution: "Biên bản ghi nhận yêu cầu (Elicitation Minutes) & Danh mục Yêu cầu thô (Raw Requirements Backlog)."
+      },
+      6: {
+        sNum: 7,
+        badge: "BƯỚC 6 • SESSION 7: MÔ HÌNH HÓA QUY TRÌNH BPMN",
+        pain: "Mô hình hóa và chuẩn hóa luồng nghiệp vụ phối hợp liên phòng ban từ AS-IS sang TO-BE để loại bỏ thao tác thừa và tối ưu thời gian xử lý.",
+        skill: "• Sơ đồ quy trình chuẩn quốc tế BPMN 2.0.<br>• Kỹ thuật phân làn Swimlane Process Mapping.<br>• Phân tích điểm nghẽn hand-off & tối ưu hóa luồng (Streamlining).",
+        solution: "Sơ đồ luồng nghiệp vụ AS-IS & TO-BE BPMN Swimlane Diagrams được thống nhất giữa Business và IT."
+      },
+      7: {
+        sNum: 8,
+        badge: "BƯỚC 7 • SESSION 8: VIẾT USER STORIES & GHERKIN",
+        pain: "Chuyển hóa quy trình TO-BE thành các đặc tả Agile nhỏ gọn, dễ lập trình và kiểm thử, đảm bảo IT viết đúng code mà không cần suy đoán.",
+        skill: "• Phân rã Epic -> Feature -> User Story chuẩn INVEST.<br>• Viết tiêu chí nghiệm thu Acceptance Criteria chuẩn Gherkin (Given-When-Then).<br>• Thiết kế Wireframe UI/UX POS 3-Click.",
+        solution: "Bộ đặc tả User Stories & Acceptance Criteria hoàn chỉnh kèm giao diện Low-fi/High-fi Wireframes."
+      },
+      8: {
+        sNum: 9,
+        badge: "BƯỚC 9 • SESSION 9: ƯU TIÊN MoSCoW & ĐÁNH GIÁ ROI",
+        pain: "Đứng trước bài toán cắt giảm ngân sách và áp lực tiến độ, BA cần tư vấn giải pháp tối ưu, lựa chọn tính năng MVP và chứng minh hiệu quả đầu tư.",
+        skill: "• Kỹ thuật phân loại ưu tiên MoSCoW.<br>• Phân tích đánh đổi tự xây dựng hay mua sẵn (Build vs Buy Analysis).<br>• Tính toán ROI, TCO & Thời gian hoàn vốn (Payback Period).",
+        solution: "Tài liệu Đề xuất Phạm vi MVP tinh gọn (5 tính năng cốt lõi) & Bảng phân tích hiệu quả tài chính Cost-Benefit Analysis."
+      },
+      9: {
+        sNum: 10,
+        badge: "BƯỚC 9 • SESSION 10: KHỞI TẠO ĐỒ ÁN & BUSINESS CASE",
+        pain: "Khởi tạo Hồ sơ Đề xuất Dự án (Business Case) tổng thể cho Đồ án tốt nghiệp thực chiến, chuẩn bị nền tảng bảo vệ trước Hội đồng Ban Giám đốc.",
+        skill: "• Tổng hợp Hồ sơ Business Case chuyên nghiệp.<br>• Chuẩn hóa bản đồ Stakeholder & Phạm vi tổng thể.<br>• Kỹ thuật lập luận logic & cấu trúc hồ sơ dự án.",
+        solution: "Hồ sơ Đồ án Capstone Project (Phần 1: Khởi tạo, Bối cảnh kinh doanh & Phân tích Vấn đề)."
+      },
+      10: {
+        sNum: 11,
+        badge: "BƯỚC 10 • SESSION 11: BẢO VỆ ĐẶC TẢ BRD/SRS & BÀN GIAO",
+        pain: "Hoàn thiện 100% tài liệu đặc tả nghiệp vụ (BRD/SRS/SOP), thuyết trình bảo vệ giải pháp chuyển đổi số toàn chuỗi và chính thức ký bàn giao cho IT.",
+        skill: "• Soạn thảo bộ Tài liệu Yêu cầu Nghiệp vụ BRD/SRS/SOP.<br>• Kỹ thuật thuyết trình & Bảo vệ trước Executive Board.<br>• Quy trình nghiệm thu Sign-off & Bàn giao kỹ thuật.",
+        solution: "Hồ sơ Đặc tả Nghiệp vụ hoàn chỉnh (Signed-off BRD/SRS) & Ký duyệt triển khai thành công trên toàn chuỗi 1.500 cửa hàng."
+      }
+    };
+
+    function showRoadmapDetail(stageNum) {
+      const data = roadmapData[stageNum];
+      if (!data) return;
+      document.getElementById('rm-stage-badge').innerText = data.badge;
+      document.getElementById('rm-pain').innerHTML = data.pain;
+      document.getElementById('rm-skill').innerHTML = data.skill;
+      document.getElementById('rm-solution').innerHTML = data.solution;
+
+      const jumpBtn = document.getElementById('rm-jump-btn');
+      if (jumpBtn) {
+        jumpBtn.setAttribute('onclick', 'showSession(' + data.sNum + ')');
+      }
+
+      document.querySelectorAll('.rm-card').forEach(card => {
+        card.classList.remove('border-amber-500', 'bg-amber-50/40', 'shadow-md');
+        card.classList.add('border-amber-200', 'bg-white', 'shadow-sm');
+      });
+      const activeCard = document.getElementById('rm-card-' + stageNum);
+      if (activeCard) {
+        activeCard.classList.remove('border-amber-200', 'bg-white', 'shadow-sm');
+        activeCard.classList.add('border-amber-500', 'bg-amber-50/40', 'shadow-md');
+      }
+
+      const box = document.getElementById('roadmap-detail-box');
+      box.classList.remove('animate-fade');
+      void box.offsetWidth;
+      box.classList.add('animate-fade');
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo("#roadmap-detail-box", { opacity: 0, scale: 0.98, y: 10 }, { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "power2.out" });
+        gsap.fromTo(["#rm-pain", "#rm-skill", "#rm-solution"], { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.3, stagger: 0.08, ease: "power2.out" });
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      showView('overview');
+      if (typeof gsap !== 'undefined') {
+        gsap.from("header", { y: -60, opacity: 0, duration: 0.6, ease: "power3.out", clearProps: "all" });
+        gsap.from("#view-overview > div:first-child", { scale: 0.97, opacity: 0, y: 25, duration: 0.7, ease: "power3.out", delay: 0.1, clearProps: "all" });
+      }
+
+      // SIDEBAR TOGGLE
+      const sidebar = document.getElementById('sidebar');
+      const trigger = document.getElementById('sidebarTrigger');
+
+      if (trigger && sidebar) {
+        trigger.addEventListener('mouseenter', () => sidebar.classList.add('open'));
+        trigger.addEventListener('click', () => sidebar.classList.toggle('open'));
+        document.addEventListener('click', (e) => {
+          if (!sidebar.contains(e.target) && !trigger.contains(e.target)) {
+            sidebar.classList.remove('open');
+          }
+        });
+      }
+    });
+    function closeSidebar() {
+      const sidebarEl = document.getElementById('sidebar');
+      if (sidebarEl) sidebarEl.classList.remove('open');
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-theme');
+      const icon = document.getElementById('themeToggleIcon');
+      const text = document.getElementById('themeToggleText');
+      const btn = document.getElementById('themeToggleBtn');
+      if (isDark) {
+        if (icon) icon.className = 'ph-fill ph-sun text-base text-yellow-300';
+        if (text) text.innerText = 'Chế độ Sáng';
+        if (btn) btn.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-yellow-400 text-gray-900 hover:bg-yellow-300 transition shadow-sm border border-yellow-300 shrink-0';
+        localStorage.setItem('ba201_theme', 'dark');
+      } else {
+        if (icon) icon.className = 'ph-fill ph-moon-stars text-base text-yellow-300';
+        if (text) text.innerText = 'Chế độ Tối';
+        if (btn) btn.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-gray-900 text-yellow-300 hover:bg-gray-800 transition shadow-sm border border-gray-700 shrink-0';
+        localStorage.setItem('ba201_theme', 'light');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('ba201_theme') === 'dark') {
+        document.body.classList.add('dark-theme');
+        const icon = document.getElementById('themeToggleIcon');
+        const text = document.getElementById('themeToggleText');
+        const btn = document.getElementById('themeToggleBtn');
+        if (icon) icon.className = 'ph-fill ph-sun text-base text-yellow-300';
+        if (text) text.innerText = 'Chế độ Sáng';
+        if (btn) btn.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-yellow-400 text-gray-900 hover:bg-yellow-300 transition shadow-sm border border-yellow-300 shrink-0';
+      }
+    });
+  </script>
 
 
 
@@ -20578,7 +21267,336 @@
     <div class="pet-ground-shadow"></div>
     <div class="pet-sprite" id="pet-sprite" aria-hidden="true">🐖</div>
   </div>
-  <script src="assets/js/main.js"></script>
+  <script>
+    let petMoveTimer = null;
+    let petBubbleTimer = null;
+    let activePetPointer = null;
+
+    let petGrabOffsetX = 0;
+    let petGrabOffsetY = 0;
+    let petPointerStartX = 0;
+    let petPointerStartY = 0;
+    let petWasDragged = false;
+    let isPetMeat = false;
+    let isPetEnabled = true;
+
+    function togglePetVisibility() {
+      const pet = document.getElementById("web-pet");
+      if (!pet) return;
+
+      isPetEnabled = !isPetEnabled;
+      const buttons = document.querySelectorAll('#petToggleBtn, #floatingPetToggleBtn');
+
+      if (!isPetEnabled) {
+        pet.style.display = "none";
+        clearTimeout(petMoveTimer);
+        clearTimeout(petBubbleTimer);
+        buttons.forEach(btn => {
+          btn.classList.add("opacity-40", "grayscale");
+          btn.setAttribute("title", "Bật Heo con (Web Pet)");
+        });
+        localStorage.setItem("rikkei_pet_enabled", "false");
+      } else {
+        pet.style.display = "";
+        schedulePetMove(300);
+        showPetBubble(isPetMeat ? "Thịt thơm ngon! 🥩" : "Ụt ịt! 🐷");
+        buttons.forEach(btn => {
+          btn.classList.remove("opacity-40", "grayscale");
+          btn.setAttribute("title", "Tắt Heo con (Web Pet)");
+        });
+        localStorage.setItem("rikkei_pet_enabled", "true");
+      }
+    }
+
+    function clampPetPosition(left, top) {
+      const pet = document.getElementById("web-pet");
+      const padding = 8;
+
+      return {
+        left: Math.max(
+          padding,
+          Math.min(
+            window.innerWidth - pet.offsetWidth - padding,
+            left
+          )
+        ),
+
+        top: Math.max(
+          72,
+          Math.min(
+            window.innerHeight - pet.offsetHeight - padding,
+            top
+          )
+        )
+      };
+    }
+
+    function showPetBubble(message) {
+      const bubble = document.getElementById("pet-bubble");
+
+      bubble.textContent = message;
+      bubble.classList.add("show");
+
+      clearTimeout(petBubbleTimer);
+
+      petBubbleTimer = setTimeout(() => {
+        bubble.classList.remove("show");
+      }, 1800);
+    }
+
+    function togglePetTransformation() {
+      const sprite = document.getElementById("pet-sprite");
+      const pet = document.getElementById("web-pet");
+      if (!sprite || !pet) return;
+
+      isPetMeat = !isPetMeat;
+      if (isPetMeat) {
+        sprite.textContent = "🍖";
+        showPetBubble("Éc éccccccc! 🍖");
+        pet.setAttribute("aria-label", "Miếng thịt đang di chuyển. Giữ và kéo để chuyển vị trí");
+      } else {
+        sprite.textContent = "🐖";
+        showPetBubble("Heo con hồi sinh! 🐷");
+        pet.setAttribute("aria-label", "Heo con đang chạy. Giữ và kéo để di chuyển heo đến vị trí khác");
+      }
+    }
+
+    function schedulePetMove(delay) {
+      clearTimeout(petMoveTimer);
+      petMoveTimer = setTimeout(movePetRandomly, delay);
+    }
+
+    function movePetRandomly() {
+      const pet = document.getElementById("web-pet");
+
+      if (
+        !pet ||
+        !isPetEnabled ||
+        activePetPointer !== null ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return;
+      }
+
+      const rect = pet.getBoundingClientRect();
+
+      const target = clampPetPosition(
+        8 + Math.random() *
+        Math.max(0, window.innerWidth - pet.offsetWidth - 16),
+
+        76 + Math.random() *
+        Math.max(0, window.innerHeight - pet.offsetHeight - 84)
+      );
+
+      const distance = Math.hypot(
+        target.left - rect.left,
+        target.top - rect.top
+      );
+
+      const duration = Math.max(
+        1200,
+        Math.min(4800, distance * 9)
+      );
+
+      pet.classList.toggle(
+        "facing-left",
+        target.left > rect.left
+      );
+
+      pet.classList.add("is-running");
+
+      pet.style.transition =
+        "left " + duration + "ms linear, " +
+        "top " + duration + "ms linear";
+
+      pet.style.left = target.left + "px";
+      pet.style.top = target.top + "px";
+
+      clearTimeout(petMoveTimer);
+
+      petMoveTimer = setTimeout(() => {
+        pet.classList.remove("is-running");
+
+        schedulePetMove(
+          500 + Math.random() * 1200
+        );
+      }, duration);
+    }
+
+    function beginPetDrag(event) {
+      if (
+        event.button !== undefined &&
+        event.button !== 0
+      ) {
+        return;
+      }
+
+      const pet = document.getElementById("web-pet");
+      const rect = pet.getBoundingClientRect();
+
+      activePetPointer = event.pointerId;
+
+      petGrabOffsetX = event.clientX - rect.left;
+      petGrabOffsetY = event.clientY - rect.top;
+
+      petPointerStartX = event.clientX;
+      petPointerStartY = event.clientY;
+      petWasDragged = false;
+
+      clearTimeout(petMoveTimer);
+
+      pet.style.transition = "none";
+      pet.style.left = rect.left + "px";
+      pet.style.top = rect.top + "px";
+
+      pet.classList.remove("is-running");
+      pet.classList.add("is-held");
+
+      pet.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    }
+
+    function dragPet(event) {
+      if (event.pointerId !== activePetPointer) {
+        return;
+      }
+
+      const distance = Math.hypot(
+        event.clientX - petPointerStartX,
+        event.clientY - petPointerStartY
+      );
+
+      if (distance > 4) {
+        petWasDragged = true;
+      }
+
+      const pet = document.getElementById("web-pet");
+
+      const next = clampPetPosition(
+        event.clientX - petGrabOffsetX,
+        event.clientY - petGrabOffsetY
+      );
+
+      pet.style.left = next.left + "px";
+      pet.style.top = next.top + "px";
+
+      event.preventDefault();
+    }
+
+    function endPetDrag(event) {
+      if (event.pointerId !== activePetPointer) {
+        return;
+      }
+
+      const pet = document.getElementById("web-pet");
+
+      if (pet.hasPointerCapture(event.pointerId)) {
+        pet.releasePointerCapture(event.pointerId);
+      }
+
+      activePetPointer = null;
+      pet.classList.remove("is-held");
+
+      showPetBubble(isPetMeat ? "Thịt thơm ngon! 🥩" : "Ụt ịt! 🐷");
+
+      schedulePetMove(900);
+    }
+
+    function keepPetInViewport() {
+      const pet = document.getElementById("web-pet");
+
+      if (!pet) {
+        return;
+      }
+
+      const rect = pet.getBoundingClientRect();
+
+      const safePosition = clampPetPosition(
+        rect.left,
+        rect.top
+      );
+
+      pet.style.transition = "none";
+      pet.style.left = safePosition.left + "px";
+      pet.style.top = safePosition.top + "px";
+
+      if (activePetPointer === null) {
+        schedulePetMove(700);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const pet = document.getElementById("web-pet");
+
+      pet.addEventListener(
+        "pointerdown",
+        beginPetDrag
+      );
+
+      pet.addEventListener(
+        "pointermove",
+        dragPet
+      );
+
+      pet.addEventListener(
+        "pointerup",
+        endPetDrag
+      );
+
+      pet.addEventListener(
+        "pointercancel",
+        endPetDrag
+      );
+
+      window.addEventListener(
+        "pointerup",
+        endPetDrag
+      );
+
+      window.addEventListener(
+        "pointercancel",
+        endPetDrag
+      );
+
+      pet.addEventListener("keydown", event => {
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+          event.preventDefault();
+          showPetBubble(isPetMeat ? "Thịt thơm ngon! 🥩" : "Ụt ịt! 🐷");
+        }
+      });
+
+      window.addEventListener(
+        "resize",
+        keepPetInViewport
+      );
+
+      keepPetInViewport();
+
+      const savedPetState = localStorage.getItem("rikkei_pet_enabled");
+      if (savedPetState === "false") {
+        isPetEnabled = false;
+        const pet = document.getElementById("web-pet");
+        if (pet) pet.style.display = "none";
+        document.querySelectorAll('#petToggleBtn, #floatingPetToggleBtn').forEach(btn => {
+          btn.classList.add("opacity-40", "grayscale");
+          btn.setAttribute("title", "Bật Heo con (Web Pet)");
+        });
+      } else {
+        setTimeout(() => {
+          if (isPetEnabled) showPetBubble("Ụt ịt! 🐷");
+        }, 350);
+        schedulePetMove(1900);
+      }
+
+      // Vòng lặp 15s đổi qua lại giữa Heo con 🐖 và Miếng thịt 🥩
+      setInterval(() => {
+        if (isPetEnabled) togglePetTransformation();
+      }, 15000);
+    });
+  </script>
 
 </body>
 
